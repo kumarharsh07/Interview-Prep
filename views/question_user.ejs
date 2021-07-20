@@ -1,0 +1,37 @@
+<%- include('partials/header'); -%>
+<nav class="navbar">
+  <div class=" container-fluid ">
+  <span class=" fs-2"><%= title%></span>
+  <a href="/addMyQuestion" class="btn btn-dark boxy" style="margin-left: auto;">Add a question</a>
+  </div>
+</nav>
+<div style="display: flex;">
+<div class="col-sm-6">
+  <ul class="d-grid gap-3">
+
+<% if(questions.length > 0){ %>
+    <% questions.forEach((question)=>{ %>
+      <div class="row">
+        <div class="col-sm-1"></div>
+        <a href="<%=question.link%>"" class="btn">
+        <li class="col-sm-10 boxy p-2 bg-light border hover_" >
+        <h3><%= question.question %></h3>
+        </li>
+        </a>
+      </div>
+  <% }) %>
+<% }else{ %>
+      <P>NOTHING TO DISPLAY YET</P>
+<%  } %>  
+  </ul>
+  
+</div>
+<div class=" col-sm-6" style="height: 30em;">
+<img src="\sol.png" class="" style="height: 100%;" >
+</div>
+</div>
+<br>
+<br>
+
+
+<%- include('partials/footer'); -%>

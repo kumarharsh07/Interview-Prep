@@ -1,0 +1,27 @@
+<%- include('partials/header'); -%>
+
+<br>
+
+<div class="container">
+<div class="row">
+<img class="col-sm-5" src="data:image/<%=exp.img.contentType%>;base64,<%=exp.img.data.toString('base64')%>" style="height: 20em;width: 20em; border-radius: 100%;">
+
+<div class="col-sm-7 text-center align-middle text-uppercase">
+<br>
+<br>
+<br>
+<h1><%= exp.name %></h1>
+<h1 ><%= title%></h1>
+<h1>Profile: <%= exp.profile %></h1>
+</div>
+</div>
+<br>
+<br>
+<h3><%= exp.text %></h3>
+
+</div>
+<br>
+<br>
+
+
+<%- include('partials/footer'); -%></br>

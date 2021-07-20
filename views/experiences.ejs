@@ -1,0 +1,59 @@
+<%- include('partials/header'); -%>
+<nav class="navbar" >
+  <div class=" container-fluid ">
+  <span class=" fs-2"><%= title%></span>
+  </div>
+</nav>
+
+
+<br>
+
+
+
+
+<br>
+<div class="row container-fluid justify-content-through">
+  
+    <% if(experiences.length > 0){ %>
+    <% experiences.forEach((experience)=>{ %>
+      <div class=" col-sm-3" style="margin-bottom: 1em;">
+    <div class="card " style="height:27em;">
+      <br>
+      <img src="data:image/<%=experience.img.contentType%>;base64,
+                     <%=experience.img.data.toString('base64')%>" style="height: 10em; width : 10em; border-radius:100%; margin: auto;">
+      <div class="card-body">
+        <h5 class="card-title text-uppercase"><%= experience.name %></h5>
+        <h5 class="card-title text-uppercase">Profie: <%=experience.profile%></h5>
+        <%
+        var ctr=0;
+        var text="";
+         for(var i=0;i<experience.text.length;i++){
+          if(experience.text[i]==" "){
+            ctr++;
+          }
+          if(ctr<10){
+            text=text + experience.text[i];
+          }
+          else{
+            break;
+          }
+        }
+      %>
+        <p class="card-text"><%=text%>...</p>
+      <div class="" style="display: inline-block;">
+        <a href="/interviewExperiences/<%=title%>/<%=experience._id%>"  class="btn btn-primary" >See More</a>
+    </div>
+      </div>
+    </div>
+    
+  </div>
+  <% }) %>
+
+<% }else{ %>
+      <P>NOTHING TO DISPLAY YET</P>
+<%  } %> 
+  
+</div>
+
+
+<%- include('partials/footer'); -%>

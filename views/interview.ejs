@@ -1,0 +1,188 @@
+<%- include('partials/header'); -%>
+  <nav class="navbar">
+    <div class=" container-fluid ">
+      <span class=" fs-2">Companies</span>
+      <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#exampleModal"
+        style="margin-left: auto;">
+        Add an interview experience
+      </button>
+
+    </div>
+  </nav>
+
+  <br>
+  <div class="container">
+    <ul class="row justify-content-through">
+
+      <% if(companies.length> 0){ %>
+        <% companies.forEach((company)=>{ %>
+
+          <li class=" col-lg-4 col-sm-5 boxy bg-light hover_row" style="height: 15em;">
+            <a href="/interviewExperiences/<%=company.company%>" style="text-decoration: none;">
+              <img src="data:image/<%=company.img.contentType%>;base64,
+                     <%=company.img.data.toString('base64')%>" style=" height: 5em;padding:0.5em;
+                     margin: -30px auto 20px;" class=" boxy bg-light">
+              <h4 class="text-center fs-2 fw-bold" style="margin-top: 1.5em;text-decoration: none ;">
+                <%=company.company%>
+              </h4>
+
+            </a>
+          </li>
+          <% }) %>
+            <% }else{ %>
+              <P>NOTHING TO DISPLAY YET</P>
+              <% } %>
+    </ul>
+  </div>
+
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Add Experience</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form enctype="multipart/form-data">
+            <div class="first">
+              <label for="name" class="form-label">Name</label>
+              <input type="text" name="name" class="form-control" required />
+              <label for="image" class="form-label">Upload Image</label>
+              <input type="file" name="image" class="form-control" required />
+              <label for="company" class="form-label">Company </label>
+              <select class='company_name' name="company" class="form-control" required>
+                <option selected disabled hidden value="" >Choose here</option>
+                <option value=1>Select New Company</option>
+                <% companies.forEach((company)=>{ %>
+                  <option value=<%=company._id %>><%= company.company %>
+                  </option>
+                  <% }); %>
+              </select>
+              <div id="otherType" style="display:none;">
+                <label for="newCompany" class="form-label">Company Name</label>
+                <input type="text" name="newCompany" class="new form-control" />
+                <label for="logo" class="form-label">Company Logo</label>
+                <input type="file" name="logo" class="new form-control" />
+                <div class="topic error"></div>
+              </div>
+              <div></div>
+
+              <label for="profile" class="form-label">Profile</label>
+              <input type="text" name="profile" class="form-control" required />
+              <div class="modal-footer">
+                <button class="next btn btn btn-primary">Next</button>
+              </div>
+            </div>
+            <div class="second" style="display:none;">
+              <label for="exp" class="form-label">Write Your Experience</label>
+              <textarea name="exp" id="" cols="49" rows="20" class="form-control"></textarea>
+              <div class="link error"></div>
+
+              <div class="modal-footer">
+
+                <button class="back btn btn btn-secondary">Back</button>
+                <button class="btn btn btn-primary">Submit</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+    crossorigin="anonymous"></script>
+  <script>
+    $('.company_name').on('change', function () {
+      var selection = $(this).val();
+      switch (selection) {
+        case "1":
+          $("#otherType").show();
+          $(".new").prop('required', true);
+          $(".new").prop('disabled', false);
+          break;
+        default:
+          $("#otherType").hide();
+          $(".new").prop('required', false);
+          $(".new").prop('disabled', true);
+          $(".new").val("");
+      }
+    });
+  </script>
+  <script>
+    $('.next').on('click', function () {
+
+      $(".first").hide();
+      $(".second").show();
+
+    });
+    $('.back').on('click', function () {
+
+      $(".first").show();
+      $(".second").hide();
+
+    });
+  </script>
+
+
+  <script>
+    const form = document.querySelector('form');
+    const linkError = document.querySelector('.link.error');
+    const topicError = document.querySelector('.topic.error');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();//prevents the forms from refreshing
+
+
+      //getting values
+      var img = form.image.files[0];
+      console.log(img);
+      const name = form.name.value;
+      const company = form.company.value;
+      const newCompany = form.newCompany.value;
+      var cimg = form.logo.files[0];
+      const profile = form.profile.value;
+      const text = form.exp.value;
+      let upload = new FormData();
+      upload.append('img', img);
+      upload.append('cimg', cimg);
+      upload.append('name', name);
+      upload.append('company', company);
+      upload.append('profile', profile);
+      upload.append('text', text);
+      upload.append('newCompany', newCompany);
+      for (var key of upload.entries()) {
+        console.log(key[0] + ', ' + key[1]);
+      }
+
+      try {
+        const res = await fetch('/addExperience', {
+          method: 'POST',
+          body: upload,//,JSON.stringify({name,profile,text,company,newCompany})),
+          //headers: {'Content-Type':'application/json'}
+        });
+
+        console.log(res);
+        const data = await res.json();
+        console.log(data);
+
+        if (data.errors) {
+          console.log(data.errors)
+          linkError.textContent = data.errors.link;
+          topicError.textContent = data.errors.topic;
+        }
+
+
+        if (res.ok) {
+          location.assign('/interviewExperiences');
+        }
+      }
+      catch (err) {
+        console.log(err);
+      }
+
+
+
+    })
+  </script>
+
+  <%- include('partials/footer'); -%>

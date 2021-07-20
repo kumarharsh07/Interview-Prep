@@ -1,0 +1,35 @@
+<%- include('partials/header'); -%>
+
+
+  
+
+  <div class="row container-fluid" style="margin-top: 10em;">
+  <div class=" col-lg-3 col-sm-6">
+    <img src="/plane.png" alt="" style="width: 100%;">
+  </div>
+
+  <div class=" col-lg-3 col-sm-6">
+    
+    <h2>Practice</h2>
+    <h3 class="fw-light">Practice Interview related questions</h3>
+    <a href="/practice" class="btn btn-dark">View</a>
+  </div>
+  <% if(user){%>
+  <div class=" col-lg-3 col-sm-6">
+    
+    <h2>My Questions</h2>
+    <h3 class="fw-light">Bookmark your favourite questions</h3>
+    <a href="/myQuestions/<%=user._id%>" class="btn btn-dark">View</a>
+  </div>
+  <%}%>
+  <div class=" col-lg-3 col-sm-6">
+    
+    <h2>Interview Reports</h2>
+    <h3 class="fw-light">Get insights on interviews given by your seniors</h3>
+    <a href="/interviewExperiences" class="btn btn-dark">View</a>
+  </div>
+  </div>
+
+
+
+<%- include('partials/footer'); -%>
